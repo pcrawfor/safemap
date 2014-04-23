@@ -38,7 +38,7 @@ func (m *MapManager) Start() {
 		select {
 		case qSt := <-m.queryChan:
 			// operate on the object that matches the query
-			parts := strings.Split(qSt, ":")
+			parts := strings.Split(qSt, "|")
 
 			switch parts[0] {
 			case "get":
