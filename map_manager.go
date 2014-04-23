@@ -76,7 +76,7 @@ func (m *MapManager) Start() {
 }
 
 func (m *MapManager) GetObject(key string) (interface{}, bool) {
-	m.queryChan <- "get:" + key
+	m.queryChan <- "get|" + key
 	msg := <-m.recvObjChan
 	return msg, (nil != msg)
 }
@@ -91,22 +91,23 @@ func (m *MapManager) SetObject(key string, obj interface{}) error {
 }
 
 func (m *MapManager) RemoveObject(key string) error {
-	m.queryChan <- "remove:" + key
+	m.queryChan <- "remove|" + key
 	s := <-m.respChan
 	if s == SUCCESS {
 		return nil
 	}
+
 	return errors.New("Error removing obj")
 }
 
 func (m *MapManager) Values() []interface{} {
-	m.queryChan <- "values:_"
+	m.queryChan <- "values|_"
 	vals := <-m.recvObjChan
 	return vals.([]interface{})
 }
 
 func (m *MapManager) Keys() []interface{} {
-	m.queryChan <- "keys:_"
+	m.queryChan <- "keys|_"
 	keys := <-m.recvObjChan
 	return keys.([]interface{})
 }
