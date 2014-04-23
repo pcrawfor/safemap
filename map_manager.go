@@ -1,7 +1,7 @@
 /*
 A channel based access object for shared use of a map of arbitrary objects
 */
-package processor
+package map_manager
 
 import (
 	"errors"
