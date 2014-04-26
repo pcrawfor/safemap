@@ -1,4 +1,4 @@
-map_manager
+safemap
 ===========
 
-A golang channel based access object for shared use of a map of arbitrary objects
+A simple wrapper around a map keyed by strings and containing arbitrary objects (interface{}) that is goroutine safe to work with.
