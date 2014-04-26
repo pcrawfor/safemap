@@ -14,7 +14,7 @@ func New() *SafeMap {
 	return &SafeMap{objects: make(map[string]interface{})}
 }
 
-// GetObject returns the object for the given key is one exists along with the boolean indicating that it was found or not
+// GetObject returns the object for the given key if one exists along with the boolean indicating that it was found or not
 func (m *SafeMap) GetObject(key string) (interface{}, bool) {
 	m.mu.RLock()
 	defer m.mu.RUnlock()
