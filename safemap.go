@@ -1,6 +1,7 @@
 package safemap
 
 import (
+	"errors"
 	"sync"
 )
 
@@ -16,6 +17,9 @@ func New() *SafeMap {
 
 // GetObject returns the object for the given key if one exists along with the boolean indicating that it was found or not
 func (m *SafeMap) GetObject(key string) (interface{}, bool) {
+	if m.invalidKey(key) {
+		return nil, false
+	}
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 	val, ok := m.objects[key]
@@ -24,6 +28,9 @@ func (m *SafeMap) GetObject(key string) (interface{}, bool) {
 
 // SetObject sets the given object for the given key
 func (m *SafeMap) SetObject(key string, obj interface{}) error {
+	if m.invalidKey(key) {
+		return errors.New("invalid key")
+	}
 	m.mu.Lock()
 	defer m.mu.Unlock()
 	m.objects[key] = obj
@@ -32,6 +39,9 @@ func (m *SafeMap) SetObject(key string, obj interface{}) error {
 
 // RemoveObject removes the object for the given key
 func (m *SafeMap) RemoveObject(key string) error {
+	if m.invalidKey(key) {
+		return errors.New("invalid key")
+	}
 	m.mu.Lock()
 	defer m.mu.Unlock()
 	delete(m.objects, key)
@@ -58,4 +68,8 @@ func (m *SafeMap) Keys() []string {
 		keys = append(keys, k)
 	}
 	return keys
+}
+
+func (s *SafeMap) invalidKey(key string) bool {
+	return len(key) <= 0
 }
